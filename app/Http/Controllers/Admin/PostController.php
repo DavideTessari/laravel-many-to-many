@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Post;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Validator;
+use App\Models\Post;
 use App\Models\Type;
 use App\Models\Technology;
 
@@ -42,10 +42,9 @@ class PostController extends Controller
         $newPost->fill($formData);
         $newPost->save();
 
-        if($request->has('technologies')) {
-            $newProject->technologies()->attach($formData['technologies']);
+        if ($request->has('technologies')) {
+            $newPost->technologies()->attach($request->input('technologies'));
         }
-
 
         return redirect()->route('admin.posts.show', $newPost->id)->with('message', $newPost->name . ' successfully created.');
     }
@@ -60,7 +59,7 @@ class PostController extends Controller
     {
         $types = Type::all();
         $technologies = Technology::all();
-        return view('admin.posts.edit', compact('post', 'types'));
+        return view('admin.posts.edit', compact('post', 'types', 'technologies'));
     }
 
     public function update(Request $request, $id)
@@ -82,10 +81,10 @@ class PostController extends Controller
 
         $post->update($formData);
 
-        if($request->has('technologies')) {
-            $project->technologies()->sync($formData['technologies']);
+        if ($request->has('technologies')) {
+            $post->technologies()->sync($request->input('technologies'));
         } else {
-            $project->technologies()->sync([]);
+            $post->technologies()->sync([]);
         }
 
         return redirect()->route('admin.posts.show', $post->id)->with('message', $post->name . ' successfully updated.');
@@ -114,7 +113,9 @@ class PostController extends Controller
                 'client_name' => 'required|string|max:255',
                 'summary' => 'nullable|string',
                 'cover_image' => 'nullable|image|max:2048',
-                'type_id' => 'nullable|exists:types,id'
+                'type_id' => 'nullable|exists:types,id',
+                'technologies' => 'array',
+                'technologies.*' => 'exists:technologies,id',
             ],
             [
                 'name.required' => 'Il campo name è obbligatorio',
@@ -126,7 +127,8 @@ class PostController extends Controller
                 'cover_image.image' => 'Il file deve essere un\'immagine',
                 'cover_image.max' => 'L\'immagine non può superare i 2MB',
                 'type_id.exists' => 'Il tipo selezionato non esiste',
-                'technologies' => 'exists:technologies,id'
+                'technologies.array' => 'Il campo technologies deve essere un array',
+                'technologies.*.exists' => 'La tecnologia selezionata non esiste',
             ]
         )->validate();
     }

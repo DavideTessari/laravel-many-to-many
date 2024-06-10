@@ -28,13 +28,14 @@ Route::middleware(['auth', 'verified'])
     // Rotte di amministrazione
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('posts', PostController::class)->parameters([
-        'projects' => 'project:slug'
+        'posts' => 'post:slug' 
     ]);
 
-    Route::resource('technologies', TechnologyController::class)->parameters([
-        'technologies' => 'technology:slug'
+     Route::resource('technologies', TechnologyController::class)->parameters([
+        'technologies' => 'technology:slug' 
     ]);
 });
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
