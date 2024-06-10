@@ -1,88 +1,33 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Technology;
-
-class TechnologyController extends Controller
+return new class extends Migration
 {
     /**
-     * Display a listing of the resource.
+     * Run the migrations.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function index()
+    public function up()
     {
-        $technologies = Technology::all();
-
-        return view('admin.technologies.index', compact('technologies'));
+        Schema::create('technologies', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->string('slug');
+            $table->timestamps();
+        });
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Reverse the migrations.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function create()
+    public function down()
     {
-        //
+        Schema::dropIfExists('technologies');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Technology $technology)
-    {
-        return view('admin.technologies.show', compact('technology'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-}
+};

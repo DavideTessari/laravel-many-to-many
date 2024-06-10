@@ -27,7 +27,13 @@ Route::middleware(['auth', 'verified'])
 ->group(function() {
     // Rotte di amministrazione
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('posts', PostController::class);
+    Route::resource('posts', PostController::class)->parameters([
+        'projects' => 'project:slug'
+    ]);
+
+    Route::resource('technologies', TechnologyController::class)->parameters([
+        'technologies' => 'technology:slug'
+    ]);
 });
 
 Route::middleware('auth')->group(function () {
