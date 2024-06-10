@@ -8,7 +8,8 @@ use App\Models\Post;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Type;
-use Illuminate\Support\Facades\Validator; 
+use Illuminate\Support\Facades\Validator;
+use App\Models\Technology;
 
 class PostController extends Controller
 {
@@ -21,7 +22,8 @@ class PostController extends Controller
     public function create()
     {
         $types = Type::all();
-        return view('admin.posts.create', compact('types'));
+        $technologies = Technology::all();
+        return view('admin.posts.create', compact('types', 'technologies'));
     }
 
     public function store(Request $request)
@@ -40,6 +42,11 @@ class PostController extends Controller
         $newPost->fill($formData);
         $newPost->save();
 
+        if($request->has('technologies')) {
+            $newProject->technologies()->attach($formData['technologies']);
+        }
+
+
         return redirect()->route('admin.posts.show', $newPost->id)->with('message', $newPost->name . ' successfully created.');
     }
 
@@ -52,6 +59,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $types = Type::all();
+        $technologies = Technology::all();
         return view('admin.posts.edit', compact('post', 'types'));
     }
 
@@ -73,6 +81,12 @@ class PostController extends Controller
         }
 
         $post->update($formData);
+
+        if($request->has('technologies')) {
+            $project->technologies()->sync($formData['technologies']);
+        } else {
+            $project->technologies()->sync([]);
+        }
 
         return redirect()->route('admin.posts.show', $post->id)->with('message', $post->name . ' successfully updated.');
     }
@@ -111,7 +125,8 @@ class PostController extends Controller
                 'client_name.required' => 'Il campo client_name è obbligatorio',
                 'cover_image.image' => 'Il file deve essere un\'immagine',
                 'cover_image.max' => 'L\'immagine non può superare i 2MB',
-                'type_id.exists' => 'Il tipo selezionato non esiste'
+                'type_id.exists' => 'Il tipo selezionato non esiste',
+                'technologies' => 'exists:technologies,id'
             ]
         )->validate();
     }
