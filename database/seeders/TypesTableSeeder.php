@@ -18,7 +18,7 @@ class TypesTableSeeder extends Seeder
     {
         $types = ['FrontEnd', 'Backend', 'FullStack', 'Design', 'DevOps'];
 
-        foreach($types as $type) {
+        foreach ($types as $type) {
             $newType = new Type();
             $newType->name = $type;
             $newType->slug = Str::slug($newType->name, '-');

@@ -20,7 +20,7 @@ class TechnologiesTableSeeder extends Seeder
 
         foreach ($technologies as $technologyName) {
             $newTechnology = new Technology();
-            $newTechnology->name =  $technologyName;
+            $newTechnology->name = $technologyName;
             $newTechnology->slug = Str::slug($newTechnology->name, '-');
             $newTechnology->save();
         }
