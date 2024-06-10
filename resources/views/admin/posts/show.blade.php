@@ -12,6 +12,16 @@
             <p><strong>Slug:</strong> {{ $post->slug }}</p>
             <p><strong>Client Name:</strong> {{ $post->client_name }}</p>
             <p><strong>Type:</strong> {{ $post->type ? $post->type->name : 'none'}}</p>
+            <div>
+                <strong>Technologies</strong>:
+                @if (count($post->technologies) > 0)
+                     @foreach ($post->technologies as $technology)
+                         {{ $technology->name }}
+                     @endforeach
+                @else
+                    No technology assigned yet
+                @endif
+            </div>
             @if ($post->cover_image)
                 <div>
                     <img src="{{ asset('storage/' . $post->cover_image) }}" alt="{{ $post->name }}">

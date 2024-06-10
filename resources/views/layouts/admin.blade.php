@@ -65,6 +65,12 @@
                                     <i class="fa-solid fa-file-alt fa-lg fa-fw"></i> Create post
                                 </a>
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-white {{ Route::currentRouteName() == 'admin.technologies.index' ? 'bg-secondary' : '' }}" href="{{ route('admin.technologies.index') }}">
+                                    <i class="fa-solid fa-newspaper fa-lg fa-fw"></i> Technologies
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </nav>

@@ -39,6 +39,17 @@
             </select>
         </div>
         <div class="mb-3">
+            <h5>Technologies</h5>
+            @foreach ($technologies as $technology)
+                <div class="form-check">
+                    <input class="form-check-input" @checked(in_array($technology->id, old('technologies', []))) name="technologies[]" type="checkbox" value="{{ $technology->id }}" id="technology-{{ $technology->id }}">
+                    <label class="form-check-label" for="technology-{{ $technology->id }}">
+                        {{ $technology->name }}
+                    </label>
+                </div>
+            @endforeach
+        </div>
+        <div class="mb-3">
             <label for="summary" class="form-label">Summary</label>
             <textarea name="summary" class="form-control my-3" id="summary" rows="5">{{ old('summary') }}</textarea>
             @error('summary')
